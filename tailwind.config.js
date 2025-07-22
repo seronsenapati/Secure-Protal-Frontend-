@@ -21,6 +21,24 @@ module.exports = {
         'secure-blue': '#1A4D8C',
         'secure-navy': '#1A1F36',
         'secure-emerald': '#10B981',
+        // Landing page custom colors:
+        navy: '#1A1F36',
+        'slate-bg': '#23293d',
+        'slate-surface': '#1a2233',
+        gold: '#ffd580',
+        teal: '#1de9b6',
+        offwhite: '#f8fafc',
+        // Used in gradients and backgrounds
+        'slate-800': '#1e293b',
+        'slate-900': '#0f172a',
+        // Header/Footer specific
+        'accent-gold': '#ffd580',
+        'accent-teal': '#1de9b6',
+        'dark-bg': '#1A1F36',
+        'dark-surface': '#23293d',
+        'text-main': '#f8fafc',
+        'text-text-secondary': '#6E7A8A',
+        // Add more if needed
       },
       fontFamily: {
         sans: ['Inter', 'Poppins', 'ui-sans-serif', 'system-ui'],

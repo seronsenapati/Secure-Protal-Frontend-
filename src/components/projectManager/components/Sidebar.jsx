@@ -9,13 +9,6 @@ const menu = [
   { name: 'Fund Requests', icon: <IndianRupee size={22} />, id: 'fund-requests', color: 'border-cyan-400' },
   { name: 'Documents & Blueprints', icon: <FileText size={22} />, id: 'documents-blueprints', color: 'border-amber-400' },
   { name: 'Internal Chat', icon: <MessageCircle size={22} />, id: 'internal-chat', color: 'border-emerald-400' },
-
-  
- 
-  
-  { name: 'Payment & Fund Tracker', icon: <CreditCard size={22} />, id: 'fund-tracker', color: 'border-emerald-400' },
-  
-  { name: 'Messaging', icon: <MessageCircle size={22} />, id: 'messaging', color: 'border-emerald-400' },
 ];
 
 export default function Sidebar() {
