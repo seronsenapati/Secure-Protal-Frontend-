@@ -9,6 +9,7 @@ import ViewBids from './pages/ViewBids';
 import AssignSupervisorSupplier from './pages/AssignSupervisorSupplier';
 import ProjectMonitoring from './pages/ProjectMonitoring';
 import FundRequests from './pages/FundRequests';
+import ProductCatalog from './pages/ProductCatalog';
 import DocumentsBlueprints from './pages/DocumentsBlueprints';
 import InternalChat from './pages/InternalChat';
 import ExportReports from './pages/ExportReports';
@@ -85,6 +86,7 @@ const App = () => {
                 <Route path="/view-bids" element={<ViewBids />} />
                 <Route path="/assign-supervisor-supplier" element={<AssignSupervisorSupplier />} />
                 <Route path="/project-monitoring" element={<ProjectMonitoring />} />
+                <Route path="/product-catalog" element={<ProductCatalog />} />
                 <Route path="/fund-requests" element={<FundRequests />} />
                 <Route path="/documents-blueprints" element={<DocumentsBlueprints />} />
                 <Route path="/internal-chat" element={<InternalChat />} />

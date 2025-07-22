@@ -62,12 +62,10 @@ const initialProducts = [
   },
 ];
 
-
-
 function getUpdateBadgeColor(timeAgo) {
-  if (timeAgo.includes('h') && parseInt(timeAgo) <= 1) return "bg-emerald-600/20 text-emerald-400";
-  if (timeAgo.includes('h') || timeAgo.includes('d') && parseInt(timeAgo) <= 1) return "bg-blue-600/20 text-blue-400";
-  return "bg-amber-600/20 text-amber-400";
+  if (timeAgo.includes('h') && parseInt(timeAgo) <= 1) return "bg-emerald-400/20 text-emerald-400";
+  if (timeAgo.includes('h') || timeAgo.includes('d') && parseInt(timeAgo) <= 1) return "bg-cyan-400/20 text-cyan-400";
+  return "bg-yellow-400/20 text-yellow-400";
 }
 
 export default function ProductCatalog() {
@@ -170,10 +168,10 @@ export default function ProductCatalog() {
   };
 
   return (
-    <div className="p-6 md:p-8 font-sans overflow-x-hidden">
+    <div className="p-6 md:p-8 font-sans overflow-x-hidden ">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-        <h2 className="text-2xl font-bold text-white">Product Catalog</h2>
+        <h2 className="text-2xl font-bold text-cyan-400">Product Catalog</h2>
         <div className="flex items-center gap-3 w-full md:w-auto">
           <div className="relative w-full md:w-64">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
@@ -182,14 +180,14 @@ export default function ProductCatalog() {
             <input
               type="text"
               placeholder="Search products..."
-              className="w-full pl-10 pr-4 py-2 rounded-lg bg-[#1a2236] text-white placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 border border-slate-600"
+              className="w-full pl-10 pr-4 py-2 rounded-lg bg-slate-800/40 backdrop-blur-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/50 border border-slate-700/50"
               value={search}
               onChange={e => setSearch(e.target.value)}
               aria-label="Search products"
             />
           </div>
           <button
-            className="ml-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500 to-blue-600 text-white font-semibold flex items-center gap-2 shadow hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="ml-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 text-slate-900 font-semibold flex items-center gap-2 shadow hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-emerald-400"
             onClick={openAdd}
           >
             <Plus className="w-5 h-5" /> Add Product
@@ -197,40 +195,38 @@ export default function ProductCatalog() {
         </div>
       </div>
 
-
-
       {/* Filters */}
-      <div className="rounded-xl bg-[#1a1f36] border border-slate-700 p-6 mb-6">
+      <div className="rounded-xl bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 p-6 mb-6">
         <div className="flex flex-col md:flex-row gap-4 items-center">
           <div className="flex items-center gap-2">
-            <Building className="w-4 h-4 text-blue-400" />
-            <label className="text-gray-300 text-sm whitespace-nowrap">Category:</label>
+            <Building className="w-4 h-4 text-emerald-400" />
+            <label className="text-slate-400 text-sm whitespace-nowrap">Category:</label>
             <select
-              className="px-3 py-1.5 rounded-lg bg-[#1a2236] text-white border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              className="px-3 py-1.5 rounded-lg bg-slate-800/40 backdrop-blur-sm text-white border border-slate-700/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50 text-sm"
               value={category}
               onChange={e => setCategory(e.target.value)}
             >
-              {categories.map(c => <option key={c} className="bg-[#1a2236] text-white">{c}</option>)}
+              {categories.map(c => <option key={c} className="bg-slate-800 text-white">{c}</option>)}
             </select>
           </div>
           <div className="flex items-center gap-2">
             <PackageIcon className="w-4 h-4 text-emerald-400" />
-            <label className="text-gray-300 text-sm whitespace-nowrap">Stock:</label>
+            <label className="text-slate-400 text-sm whitespace-nowrap">Stock:</label>
             <select
-              className="px-3 py-1.5 rounded-lg bg-[#1a2236] text-white border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              className="px-3 py-1.5 rounded-lg bg-slate-800/40 backdrop-blur-sm text-white border border-slate-700/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50 text-sm"
               value={stock}
               onChange={e => setStock(e.target.value)}
             >
-              {stockStatuses.map(s => <option key={s} className="bg-[#1a2236] text-white">{s}</option>)}
+              {stockStatuses.map(s => <option key={s} className="bg-slate-800 text-white">{s}</option>)}
             </select>
           </div>
           <Tooltip content="Reset all filters">
-        <button
+            <button
               onClick={resetFilters}
-              className="p-2 rounded-lg bg-slate-700 hover:bg-slate-600 transition"
-        >
+              className="p-2 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 transition"
+            >
               <RotateCcw className="w-4 h-4 text-slate-300" />
-        </button>
+            </button>
           </Tooltip>
         </div>
       </div>
@@ -240,8 +236,8 @@ export default function ProductCatalog() {
         {filtered.map(product => (
           <motion.div
             key={product.id}
-            whileHover={{ scale: 1.02, boxShadow: "0 8px 32px 0 rgba(16, 185, 129, 0.15)" }}
-            className="relative rounded-2xl bg-[#182033] border border-slate-700 shadow-md p-6 flex flex-col gap-3 transition-all min-h-[240px] group"
+            whileHover={{ scale: 1.02, boxShadow: "0 8px 32px 0 rgba(45, 212, 191, 0.15)" }}
+            className="relative rounded-2xl bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 shadow-md p-6 flex flex-col gap-3 transition-all min-h-[240px] group"
             tabIndex={0}
             aria-label={product.name}
           >
@@ -250,7 +246,7 @@ export default function ProductCatalog() {
               <div className="absolute top-3 left-3 w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
             )}
             {product.status === "Low Stock" && (
-              <div className="absolute top-3 left-3 w-2 h-2 bg-amber-400 rounded-full animate-pulse" />
+              <div className="absolute top-3 left-3 w-2 h-2 bg-yellow-400 rounded-full animate-pulse" />
             )}
 
             {/* Last Updated Badge */}
@@ -262,14 +258,14 @@ export default function ProductCatalog() {
             </div>
 
             {/* Product Icon */}
-            <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-[#232b3b] mb-2">
+            <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-slate-700/50 mb-2">
               <Package className="w-7 h-7 text-slate-300" />
             </div>
 
             <div className="text-lg font-bold text-white mb-1">{product.name}</div>
             
             <div className="flex items-center gap-2 text-sm text-slate-300">
-              <span className="bg-slate-800/60 px-2 py-0.5 rounded-full">{product.unit}</span>
+              <span className="bg-slate-700/50 px-2 py-0.5 rounded-full">{product.unit}</span>
               <span className="ml-2 text-emerald-400 font-semibold">₹{product.price} <span className="text-xs font-normal text-slate-400">/ {product.unit.toLowerCase()}</span></span>
             </div>
 
@@ -281,25 +277,25 @@ export default function ProductCatalog() {
             <div className="flex items-center gap-2 mt-2">
               <span className={`px-3 py-0.5 rounded-full text-xs font-semibold shadow-sm flex items-center gap-1 ${
                 product.status === "In Stock" 
-                  ? "bg-emerald-600/20 text-emerald-400" 
-                  : "bg-amber-600/20 text-amber-400"
+                  ? "bg-emerald-400/20 text-emerald-400" 
+                  : "bg-yellow-400/20 text-yellow-400"
               }`}>
                 {product.status === "In Stock" ? <CheckCircle className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
                 {product.status}
               </span>
             </div>
 
-                        {/* Actions */}
+            {/* Actions */}
             <div className="flex gap-2 mt-4">
               <button 
-                className="p-2 rounded-full bg-[#232b3b] hover:bg-blue-900/40 transition" 
+                className="p-2 rounded-full bg-slate-700/50 hover:bg-cyan-400/20 transition" 
                 aria-label="Edit product" 
                 onClick={() => openEdit(product)}
               >
-                <Edit className="w-4 h-4 text-blue-400" />
+                <Edit className="w-4 h-4 text-cyan-400" />
               </button>
               <button 
-                className="p-2 rounded-full bg-[#232b3b] hover:bg-red-900/40 transition" 
+                className="p-2 rounded-full bg-slate-700/50 hover:bg-red-400/20 transition" 
                 aria-label="Delete product" 
                 onClick={() => openDelete(product)}
               >
@@ -307,7 +303,7 @@ export default function ProductCatalog() {
               </button>
             </div>
           </motion.div>
-            ))}
+        ))}
         {filtered.length === 0 && (
           <div className="col-span-full text-center text-slate-400 py-12">No products found.</div>
         )}
@@ -316,58 +312,58 @@ export default function ProductCatalog() {
       {/* Edit Modal */}
       {editModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-[6px]" onClick={closeEdit} />
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-[6px]" onClick={closeEdit} />
           <motion.form
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
             onSubmit={saveEdit}
-            className="relative z-10 w-full max-w-md mx-auto rounded-xl bg-[#1a1f36] shadow-2xl border border-slate-700 p-8"
+            className="relative z-10 w-full max-w-md mx-auto rounded-xl bg-slate-800/40 backdrop-blur-sm shadow-2xl border border-slate-700/50 p-8"
             tabIndex={-1}
             aria-modal="true"
             role="dialog"
           >
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-white">Edit Product</h3>
-              <button type="button" onClick={closeEdit} className="text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
+              <button type="button" onClick={closeEdit} className="text-slate-400 hover:text-red-400"><X className="w-5 h-5" /></button>
             </div>
             <div className="space-y-4">
               <div>
-              <label className="block text-gray-300 mb-1">Name</label>
-              <input
-                  className="w-full px-3 py-2 rounded bg-[#232b3b] text-white border border-slate-700 focus:outline-none"
+                <label className="block text-slate-400 mb-1">Name</label>
+                <input
+                  className="w-full px-3 py-2 rounded bg-slate-800/40 backdrop-blur-sm text-white border border-slate-700/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
                   name="name"
                   value={editModal.name}
                   onChange={handleEditChange}
-                required
-              />
-            </div>
+                  required
+                />
+              </div>
               <div>
-              <label className="block text-gray-300 mb-1">Unit</label>
-              <input
-                  className="w-full px-3 py-2 rounded bg-[#232b3b] text-white border border-slate-700 focus:outline-none"
+                <label className="block text-slate-400 mb-1">Unit</label>
+                <input
+                  className="w-full px-3 py-2 rounded bg-slate-800/40 backdrop-blur-sm text-white border border-slate-700/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
                   name="unit"
                   value={editModal.unit}
                   onChange={handleEditChange}
-                required
-              />
-            </div>
+                  required
+                />
+              </div>
               <div>
-                <label className="block text-gray-300 mb-1">Price</label>
-              <input
-                type="number"
-                  className="w-full px-3 py-2 rounded bg-[#232b3b] text-white border border-slate-700 focus:outline-none"
+                <label className="block text-slate-400 mb-1">Price</label>
+                <input
+                  type="number"
+                  className="w-full px-3 py-2 rounded bg-slate-800/40 backdrop-blur-sm text-white border border-slate-700/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
                   name="price"
                   value={editModal.price}
                   onChange={handleEditChange}
-                required
-              />
+                  required
+                />
               </div>
               <div>
-                <label className="block text-gray-300 mb-1">Stock Status</label>
+                <label className="block text-slate-400 mb-1">Stock Status</label>
                 <select
-                  className="w-full px-3 py-2 rounded bg-[#232b3b] text-white border border-slate-700 focus:outline-none"
+                  className="w-full px-3 py-2 rounded bg-slate-800/40 backdrop-blur-sm text-white border border-slate-700/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
                   name="status"
                   value={editModal.status}
                   onChange={handleEditChange}
@@ -379,8 +375,8 @@ export default function ProductCatalog() {
               </div>
             </div>
             <div className="flex justify-end gap-2 mt-8">
-              <button type="button" className="px-4 py-2 rounded bg-gray-700 text-gray-200 hover:bg-gray-600" onClick={closeEdit}>Cancel</button>
-              <button type="submit" className="px-4 py-2 rounded bg-gradient-to-r from-emerald-500 to-blue-600 text-white font-semibold shadow hover:scale-105 transition-transform">Save Changes</button>
+              <button type="button" className="px-4 py-2 rounded bg-slate-700/50 text-slate-300 hover:bg-slate-600/50" onClick={closeEdit}>Cancel</button>
+              <button type="submit" className="px-4 py-2 rounded bg-gradient-to-r from-emerald-400 to-cyan-400 text-slate-900 font-semibold shadow hover:scale-105 transition-transform">Save Changes</button>
             </div>
           </motion.form>
         </div>
@@ -389,25 +385,25 @@ export default function ProductCatalog() {
       {/* Delete Modal */}
       {deleteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-[6px]" onClick={closeDelete} />
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-[6px]" onClick={closeDelete} />
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="relative z-10 w-full max-w-md mx-auto rounded-xl bg-[#1a1f36] shadow-2xl border border-slate-700 p-8"
+            className="relative z-10 w-full max-w-md mx-auto rounded-xl bg-slate-800/40 backdrop-blur-sm shadow-2xl border border-slate-700/50 p-8"
             tabIndex={-1}
             aria-modal="true"
             role="dialog"
           >
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-white">Delete Product?</h3>
-              <button type="button" onClick={closeDelete} className="text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
+              <button type="button" onClick={closeDelete} className="text-slate-400 hover:text-red-400"><X className="w-5 h-5" /></button>
             </div>
-            <div className="mb-6 text-slate-300">Are you sure you want to delete <span className="font-semibold text-white">{deleteModal.name}</span>?</div>
+            <div className="mb-6 text-slate-400">Are you sure you want to delete <span className="font-semibold text-white">{deleteModal.name}</span>?</div>
             <div className="flex justify-end gap-2">
-              <button type="button" className="px-4 py-2 rounded bg-gray-700 text-gray-200 hover:bg-gray-600" onClick={closeDelete}>Cancel</button>
-              <button type="button" className="px-4 py-2 rounded bg-gradient-to-r from-red-500 to-amber-600 text-white font-semibold shadow hover:scale-105 transition-transform" onClick={confirmDelete}>Delete</button>
+              <button type="button" className="px-4 py-2 rounded bg-slate-700/50 text-slate-300 hover:bg-slate-600/50" onClick={closeDelete}>Cancel</button>
+              <button type="button" className="px-4 py-2 rounded bg-gradient-to-r from-red-400 to-yellow-400 text-slate-900 font-semibold shadow hover:scale-105 transition-transform" onClick={confirmDelete}>Delete</button>
             </div>
           </motion.div>
         </div>
@@ -416,27 +412,27 @@ export default function ProductCatalog() {
       {/* Add Product Modal */}
       {addModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-[6px]" onClick={closeAdd} />
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-[6px]" onClick={closeAdd} />
           <motion.form
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
             onSubmit={submitAdd}
-            className="relative z-10 w-full max-w-md mx-auto rounded-xl bg-[#1a1f36] shadow-2xl border border-slate-700 p-8"
+            className="relative z-10 w-full max-w-md mx-auto rounded-xl bg-slate-800/40 backdrop-blur-sm shadow-2xl border border-slate-700/50 p-8"
             tabIndex={-1}
             aria-modal="true"
             role="dialog"
           >
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-white">Add New Product</h3>
-              <button type="button" onClick={closeAdd} className="text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
+              <button type="button" onClick={closeAdd} className="text-slate-400 hover:text-red-400"><X className="w-5 h-5" /></button>
             </div>
             <div className="space-y-4">
               <div>
-                <label className="block text-gray-300 mb-1">Product Name</label>
+                <label className="block text-slate-400 mb-1">Product Name</label>
                 <input
-                  className="w-full px-3 py-2 rounded bg-[#232b3b] text-white border border-slate-700 focus:outline-none"
+                  className="w-full px-3 py-2 rounded bg-slate-800/40 backdrop-blur-sm text-white border border-slate-700/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
                   name="name"
                   value={addForm.name}
                   onChange={handleAddChange}
@@ -444,9 +440,9 @@ export default function ProductCatalog() {
                 />
               </div>
               <div>
-                <label className="block text-gray-300 mb-1">Unit</label>
+                <label className="block text-slate-400 mb-1">Unit</label>
                 <select
-                  className="w-full px-3 py-2 rounded bg-[#232b3b] text-white border border-slate-700 focus:outline-none"
+                  className="w-full px-3 py-2 rounded bg-slate-800/40 backdrop-blur-sm text-white border border-slate-700/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
                   name="unit"
                   value={addForm.unit}
                   onChange={handleAddChange}
@@ -462,34 +458,34 @@ export default function ProductCatalog() {
                 </select>
               </div>
               <div>
-                <label className="block text-gray-300 mb-1">Price per unit</label>
-              <input
-                type="number"
-                  className="w-full px-3 py-2 rounded bg-[#232b3b] text-white border border-slate-700 focus:outline-none"
+                <label className="block text-slate-400 mb-1">Price per unit</label>
+                <input
+                  type="number"
+                  className="w-full px-3 py-2 rounded bg-slate-800/40 backdrop-blur-sm text-white border border-slate-700/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
                   name="price"
                   value={addForm.price}
                   onChange={handleAddChange}
-                required
-              />
-            </div>
+                  required
+                />
+              </div>
               <div>
-                <label className="block text-gray-300 mb-1">Stock Status</label>
-              <select
-                  className="w-full px-3 py-2 rounded bg-[#232b3b] text-white border border-slate-700 focus:outline-none"
+                <label className="block text-slate-400 mb-1">Stock Status</label>
+                <select
+                  className="w-full px-3 py-2 rounded bg-slate-800/40 backdrop-blur-sm text-white border border-slate-700/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
                   name="status"
                   value={addForm.status}
                   onChange={handleAddChange}
-                required
-              >
+                  required
+                >
                   <option>In Stock</option>
                   <option>Low Stock</option>
-              </select>
+                </select>
               </div>
               <div>
-                <label className="block text-gray-300 mb-1">Product Icon (optional)</label>
+                <label className="block text-slate-400 mb-1">Product Icon (optional)</label>
                 <label
                   htmlFor="icon-upload"
-                  className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-blue-500/40 rounded-lg cursor-pointer bg-[#232b3b] hover:border-blue-400 transition group focus-within:border-blue-400"
+                  className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-slate-700/50 rounded-lg cursor-pointer bg-slate-800/40 backdrop-blur-sm hover:border-emerald-400/50 transition group focus-within:border-emerald-400/50"
                   tabIndex={0}
                 >
                   {addForm.icon ? (
@@ -503,8 +499,8 @@ export default function ProductCatalog() {
                     </>
                   ) : (
                     <>
-                      <UploadCloud className="w-8 h-8 text-blue-400 mb-1" />
-                      <span className="text-xs text-slate-400 group-hover:text-blue-400">Drag & drop or click to upload</span>
+                      <UploadCloud className="w-8 h-8 text-emerald-400 mb-1" />
+                      <span className="text-xs text-slate-400 group-hover:text-emerald-400">Drag & drop or click to upload</span>
                     </>
                   )}
                   <input
@@ -520,8 +516,8 @@ export default function ProductCatalog() {
               {addError && <div className="text-red-400 text-sm mt-2">{addError}</div>}
             </div>
             <div className="flex justify-end gap-2 mt-8">
-              <button type="button" className="px-4 py-2 rounded bg-gray-700 text-gray-200 hover:bg-gray-600" onClick={closeAdd}>Cancel</button>
-              <button type="submit" className="px-4 py-2 rounded bg-gradient-to-r from-emerald-500 to-blue-600 text-white font-semibold shadow hover:scale-105 transition-transform">Add Product</button>
+              <button type="button" className="px-4 py-2 rounded bg-slate-700/50 text-slate-300 hover:bg-slate-600/50" onClick={closeAdd}>Cancel</button>
+              <button type="submit" className="px-4 py-2 rounded bg-gradient-to-r from-emerald-400 to-cyan-400 text-slate-900 font-semibold shadow hover:scale-105 transition-transform">Add Product</button>
             </div>
           </motion.form>
         </div>
@@ -531,4 +527,4 @@ export default function ProductCatalog() {
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
     </div>
   );
-} 
+}
