@@ -73,7 +73,7 @@ const App = () => {
     <ProjectContext.Provider value={{ addProject, dynamicProjects, hardcodedProjects }}>
       <Router>
         <div className="relative min-h-screen flex bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-text font-sans">
-          <ParticleBackground />
+          {/* <ParticleBackground /> */}
           <Sidebar />
           <div className="flex-1 flex flex-col min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900  ">
             {/* <Topbar /> */}

@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
-import { FileText, FileImage, FileSpreadsheet, Download, Eye, Loader2, CheckCircle, UploadCloud, XCircle, Search } from 'lucide-react';
+import {
+  FileText,
+  FileImage,
+  FileSpreadsheet,
+  Download,
+  Eye,
+  Loader2,
+  CheckCircle,
+  UploadCloud,
+  XCircle,
+  Search,
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const FILE_TYPES = [
-  { label: 'Legal Papers', accept: '.pdf', key: 'legal', icon: <FileText className="text-accent" /> },
-  { label: 'Blueprints / Maps', accept: '.pdf,.jpg,.jpeg,.png', key: 'blueprints', icon: <FileImage className="text-accent" /> },
-  { label: 'BOQ – Bill of Quantity', accept: '.pdf,.xlsx', key: 'boq', icon: <FileSpreadsheet className="text-accent" /> },
-  { label: 'Safety & Compliance Docs', accept: '.pdf', key: 'safety', icon: <FileText className="text-accent" /> },
+  { label: 'Legal Papers', accept: '.pdf', key: 'legal', icon: <FileText className="text-emerald-400" /> },
+  { label: 'Blueprints / Maps', accept: '.pdf,.jpg,.jpeg,.png', key: 'blueprints', icon: <FileImage className="text-cyan-400" /> },
+  { label: 'BOQ – Bill of Quantity', accept: '.pdf,.xlsx', key: 'boq', icon: <FileSpreadsheet className="text-emerald-400" /> },
+  { label: 'Safety & Compliance Docs', accept: '.pdf', key: 'safety', icon: <FileText className="text-emerald-400" /> },
 ];
 
 const DUMMY_FILES = [
@@ -53,10 +64,10 @@ const DUMMY_FILES = [
 ];
 
 function getFileIcon(ext) {
-  if (ext === 'pdf') return <FileText className="text-error" />;
-  if (ext === 'xlsx') return <FileSpreadsheet className="text-success" />;
-  if (ext === 'image' || ext === 'jpg' || ext === 'jpeg' || ext === 'png') return <FileImage className="text-accent" />;
-  return <FileText className="text-primary" />;
+  if (ext === 'pdf') return <FileText className="text-red-400" />;
+  if (ext === 'xlsx') return <FileSpreadsheet className="text-emerald-400" />;
+  if (ext === 'image' || ext === 'jpg' || ext === 'jpeg' || ext === 'png') return <FileImage className="text-cyan-400" />;
+  return <FileText className="text-slate-300" />;
 }
 
 function DocumentUploadForm({ onUpload }) {
@@ -77,7 +88,6 @@ function DocumentUploadForm({ onUpload }) {
 
   const handleSubmit = e => {
     e.preventDefault();
-    // Validate at least one file
     if (!Object.values(files).some(f => f)) {
       setError('Please select at least one file to upload.');
       return;
@@ -90,43 +100,42 @@ function DocumentUploadForm({ onUpload }) {
       setComments('');
       setTimeout(() => setSuccess(false), 2000);
       setError('');
-      // Simulate upload
       onUpload(files, comments);
     }, 1200);
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-card p-6 mb-8">
-      <div className="text-lg font-bold text-primary mb-4">Upload Project Documents</div>
+    <div className="bg-slate-800/40 backdrop-blur-sm rounded-xl p-6 mb-8">
+      <div className="text-lg font-bold text-cyan-400 mb-4">Upload Project Documents</div>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {FILE_TYPES.map(ft => (
             <div key={ft.key}>
-              <label className="block font-semibold text-primary mb-1 flex items-center gap-2">{ft.icon} {ft.label}</label>
-              <label className="flex flex-col items-center px-6 py-8 glass border-2 border-dashed border-accent/30 rounded-xl cursor-pointer transition-all duration-200 hover:shadow-card">
-                <UploadCloud className="text-accent mb-2" size={28} />
-                <span className="text-accent font-medium mb-2">Click or drag to upload</span>
+              <label className="block font-semibold text-white mb-1 flex items-center gap-2">{ft.icon} {ft.label}</label>
+              <label className="flex flex-col items-center px-6 py-8 bg-slate-800/40 backdrop-blur-sm border-2 border-dashed border-slate-700/50 rounded-xl cursor-pointer transition-all duration-200 hover:shadow-card">
+                <UploadCloud className="text-emerald-400 mb-2" size={28} />
+                <span className="text-emerald-400 font-medium mb-2">Click or drag to upload</span>
                 <input type="file" accept={ft.accept} className="hidden" onChange={e => handleFile(ft.key, e.target.files[0])} />
-                {files[ft.key] && <span className="text-secondary mt-2">{files[ft.key].name}</span>}
+                {files[ft.key] && <span className="text-slate-400 mt-2">{files[ft.key].name}</span>}
               </label>
             </div>
           ))}
         </div>
         <div>
-          <label className="block font-semibold text-primary mb-1">Comments / Notes</label>
+          <label className="block font-semibold text-white mb-1">Comments / Notes</label>
           <textarea
-            className="glass w-full p-3 rounded-lg border border-border focus:ring-2 focus:ring-accent/30"
+            className="w-full p-3 rounded-lg bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 focus:ring-2 focus:ring-emerald-400/50 text-white placeholder-slate-400"
             placeholder="Any additional notes (optional)"
             value={comments}
             onChange={e => setComments(e.target.value)}
             rows={2}
           />
         </div>
-        {error && <div className="text-error text-xs mb-2">{error}</div>}
+        {error && <div className="text-red-400 text-xs mb-2">{error}</div>}
         <div className="flex justify-end">
           <button
             type="submit"
-            className="px-8 py-2 rounded-lg bg-primary text-white font-semibold shadow-card hover:scale-105 transition flex items-center gap-2 min-w-[180px] justify-center"
+            className="px-8 py-2 rounded-lg bg-gradient-to-r from-emerald-400 to-cyan-400 text-slate-900 font-semibold shadow-card hover:scale-105 transition flex items-center gap-2 min-w-[180px] justify-center"
             disabled={loading}
           >
             {loading ? <Loader2 className="animate-spin" size={20} /> : 'Upload Documents'}
@@ -140,9 +149,9 @@ function DocumentUploadForm({ onUpload }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 30 }}
             transition={{ duration: 0.4 }}
-            className="fixed left-1/2 -translate-x-1/2 bottom-8 bg-primary text-white px-6 py-3 rounded-xl shadow-card flex items-center gap-2 z-50"
+            className="fixed left-1/2 -translate-x-1/2 bottom-8 bg-gradient-to-r from-emerald-400 to-cyan-400 text-slate-900 px-6 py-3 rounded-xl shadow-card flex items-center gap-2 z-50"
           >
-            <CheckCircle className="text-success" size={24} />
+            <CheckCircle className="text-white" size={24} />
             <span>Document uploaded successfully</span>
           </motion.div>
         )}
@@ -157,13 +166,13 @@ function DocumentTable({ files, onView, onDownload, search, setSearch }) {
     f.type.toLowerCase().includes(search.toLowerCase())
   );
   return (
-    <div className="bg-white rounded-xl shadow-card p-6">
+    <div className="bg-slate-800/40 backdrop-blur-sm rounded-xl  p-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-        <div className="text-lg font-bold text-primary">Uploaded Documents</div>
-        <div className="flex items-center gap-2 bg-[#F7F9FC] rounded-lg px-3 py-1 border border-border">
-          <Search className="text-accent" size={18} />
+        <div className="text-lg font-bold text-cyan-400">Uploaded Documents</div>
+        <div className="flex items-center gap-2 bg-slate-700/50 rounded-lg px-3 py-1 border border-slate-700/50">
+          <Search className="text-emerald-400" size={18} />
           <input
-            className="bg-transparent outline-none text-primary text-sm"
+            className="bg-transparent outline-none text-white text-sm placeholder-slate-400"
             placeholder="Search by file name or type..."
             value={search}
             onChange={e => setSearch(e.target.value)}
@@ -172,7 +181,7 @@ function DocumentTable({ files, onView, onDownload, search, setSearch }) {
       </div>
       <table className="w-full text-sm">
         <thead>
-          <tr className="text-primary bg-[#F7F9FC]">
+          <tr className="text-white bg-slate-700/50">
             <th className="py-2 px-3 text-left font-semibold">File Name</th>
             <th className="py-2 px-3 text-left font-semibold">Type</th>
             <th className="py-2 px-3 text-left font-semibold">Uploaded By</th>
@@ -182,22 +191,22 @@ function DocumentTable({ files, onView, onDownload, search, setSearch }) {
         </thead>
         <tbody>
           {filtered.map(f => (
-            <tr key={f.id} className="border-b last:border-0">
+            <tr key={f.id} className="border-b last:border-0 border-slate-700/50">
               <td className="py-2 px-3 flex items-center gap-2">
                 {getFileIcon(f.ext)}
-                <span className="font-medium text-primary">{f.name}</span>
-                {f.isNew && <span className="ml-2 px-2 py-0.5 rounded-full bg-accent/10 text-accent text-xs font-semibold">New Upload</span>}
+                <span className="font-medium text-white">{f.name}</span>
+                {f.isNew && <span className="ml-2 px-2 py-0.5 rounded-full bg-emerald-400/20 text-emerald-400 text-xs font-semibold">New Upload</span>}
               </td>
-              <td className="py-2 px-3">{f.type}</td>
-              <td className="py-2 px-3">{f.uploadedBy}</td>
-              <td className="py-2 px-3">{f.date}</td>
+              <td className="py-2 px-3 text-slate-300">{f.type}</td>
+              <td className="py-2 px-3 text-slate-300">{f.uploadedBy}</td>
+              <td className="py-2 px-3 text-slate-300">{f.date}</td>
               <td className="py-2 px-3 flex gap-2">
-                <button className="text-accent hover:underline flex items-center gap-1" onClick={() => onView(f)}><Eye size={16} /> View</button>
-                <button className="text-primary hover:text-accent flex items-center gap-1" onClick={() => onDownload(f)}><Download size={16} /> Download</button>
+                <button className="text-emerald-400 hover:text-cyan-400 flex items-center gap-1" onClick={() => onView(f)}><Eye size={16} /> View</button>
+                <button className="text-slate-300 hover:text-cyan-400 flex items-center gap-1" onClick={() => onDownload(f)}><Download size={16} /> Download</button>
               </td>
             </tr>
           ))}
-          {filtered.length === 0 && <tr><td colSpan={5} className="text-center text-secondary py-8">No documents found.</td></tr>}
+          {filtered.length === 0 && <tr><td colSpan={5} className="text-center text-slate-400 py-8">No documents found.</td></tr>}
         </tbody>
       </table>
     </div>
@@ -217,19 +226,19 @@ function FilePreviewModal({ open, file, onClose }) {
         exit={{ opacity: 0 }}
       >
         <motion.div
-          className="bg-white rounded-xl p-8 max-w-2xl w-full shadow-card relative"
+          className="bg-slate-800/40 backdrop-blur-sm rounded-xl p-8 max-w-2xl w-full "
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
         >
-          <button className="absolute top-3 right-3 text-secondary hover:text-error" onClick={onClose}><XCircle size={24} /></button>
-          <div className="font-bold text-lg text-primary mb-4">{file.name}</div>
+          <button className="absolute top-3 right-3 text-slate-400 hover:text-red-400" onClick={onClose}><XCircle size={24} /></button>
+          <div className="font-bold text-lg text-white mb-4">{file.name}</div>
           {isImage ? (
             <img src={file.url} alt={file.name} className="w-full max-h-[60vh] object-contain rounded-lg" />
           ) : isPDF ? (
-            <iframe src={file.url} title={file.name} className="w-full h-[60vh] rounded-lg border" />
+            <iframe src={file.url} title={file.name} className="w-full h-[60vh] rounded-lg border border-slate-700/50" />
           ) : (
-            <div className="text-secondary">Preview not available for this file type.</div>
+            <div className="text-slate-400">Preview not available for this file type.</div>
           )}
         </motion.div>
       </motion.div>
@@ -242,7 +251,6 @@ export default function DocumentsBlueprints() {
   const [search, setSearch] = useState('');
   const [preview, setPreview] = useState(null);
 
-  // Simulate upload (add to file list)
   const handleUpload = (uploadedFiles, comments) => {
     const now = new Date();
     const date = now.toISOString().slice(0, 10);
@@ -266,22 +274,17 @@ export default function DocumentsBlueprints() {
     setFiles(f => [...newFiles, ...f.map(file => ({ ...file, isNew: false }))]);
   };
 
-  // Simulate download
   const handleDownload = file => {
-    // For demo, just open the file in a new tab
     window.open(file.url, '_blank');
   };
 
   return (
-    <div className="h-full w-full bg-[#F7F9FC] p-0 m-0">
+    <div className="h-full w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-0 m-0">
       <div className="w-full h-full">
-        {/* Section 1: Upload Area (PM only) */}
         <DocumentUploadForm onUpload={handleUpload} />
-        {/* Section 2: Uploaded Documents Table */}
         <DocumentTable files={files} onView={setPreview} onDownload={handleDownload} search={search} setSearch={setSearch} />
-        {/* File Preview Modal */}
         <FilePreviewModal open={!!preview} file={preview} onClose={() => setPreview(null)} />
       </div>
     </div>
   );
-} 
+}
