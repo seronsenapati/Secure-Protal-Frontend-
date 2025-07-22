@@ -18,7 +18,8 @@ const menu = [
   { name: 'Messaging', icon: <MessageCircle size={22} />, id: 'messaging', color: 'border-emerald-400' },
 ];
 
-export default function Sidebar({ activeItem = 'dashboard-home', onItemSelect }) {
+export default function Sidebar() {
+  const [activeItem,setActiveItem] = useState()
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const toggleProfileDropdown = () => {
@@ -59,7 +60,7 @@ export default function Sidebar({ activeItem = 'dashboard-home', onItemSelect })
            <Link to={`/${item.id}`}>
              <button
               key={item.name}
-              onClick={() => handleItemClick(item.id)}
+              onClick={() => setActiveItem(item.id)}
               className={`group flex items-center gap-3 w-full pl-4 ml-1 mx-2 py-3 rounded-xl transition-all duration-300 font-medium text-base text-left
                 hover:bg-slate-700/50 hover:text-white hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-400/20
                 ${isActive 
