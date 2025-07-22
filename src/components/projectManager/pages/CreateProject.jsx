@@ -78,8 +78,11 @@ export default function CreateProjectForm() {
   };
 
   return (
-    <div className="h-full w-full bg-background flex items-center justify-center">
-      <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="glass w-full h-full p-12 shadow-card">
+    <div className="h-full w-full flex flex-col items-center justify-center ">
+      <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent w-full text-start mb-4">
+        Create New Project
+      </h1>
+      <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="w-full min-w-5xl min-h-[95vh] overflow-y-auto bg-slate-800/95 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-8">
         <StepIndicator step={step} setStep={setStep} />
         <form onSubmit={handleSubmit} className="space-y-8">
           <AnimatePresence mode="wait">
@@ -111,13 +114,13 @@ export default function CreateProjectForm() {
           </AnimatePresence>
           <div className="flex justify-between mt-8">
             {step > 0 && (
-              <button type="button" onClick={prev} className="px-6 py-2 rounded bg-gray-200 text-primary font-semibold hover:bg-gray-300 transition">Back</button>
+              <button type="button" onClick={prev} className="px-6 py-2 rounded-lg bg-slate-700/50 text-white font-semibold hover:bg-slate-600 transition">Back</button>
             )}
             {step < 4 && (
-              <button type="button" onClick={next} className="px-6 py-2 rounded bg-primary text-white font-semibold hover:bg-primary/90 transition">Next</button>
+              <button type="button" onClick={next} className="px-6 py-2 rounded-lg bg-gradient-to-r from-emerald-400 to-cyan-400 text-slate-900 font-semibold hover:from-emerald-500 hover:to-cyan-500 transition">Next</button>
             )}
             {step === 4 && (
-              <button type="submit" className="px-6 py-2 rounded bg-success text-white font-semibold hover:bg-success/90 transition" disabled={loading}>{loading ? 'Submitting...' : 'Submit'}</button>
+              <button type="submit" className="px-6 py-2 rounded-lg bg-gradient-to-r from-yellow-300 via-emerald-400 to-cyan-400 text-slate-900 font-semibold hover:from-emerald-500 hover:to-cyan-500 transition" disabled={loading}>{loading ? 'Submitting...' : 'Submit'}</button>
             )}
           </div>
           {success && <div className="text-success font-semibold mt-4">Project created successfully!</div>}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Home, PlusSquare, FolderOpen, Gavel, Users, BarChart2, FileText, MessageCircle, FileDown, IndianRupee, Box, ClipboardList, Truck, CreditCard, History, Shield, User, UserCircle, LogOut, ChevronDown } from "lucide-react";
-
+import { Link } from "react-router-dom";
 const menu = [
   { name: 'Dashboard Home', icon: <Home size={22} />, id: 'dashboard-home', color: 'border-emerald-400' },
   { name: 'Create Project', icon: <PlusSquare size={22} />, id: 'create-project', color: 'border-emerald-400' },
@@ -56,7 +56,8 @@ export default function Sidebar({ activeItem = 'dashboard-home', onItemSelect })
         {menu.map((item) => {
           const isActive = activeItem === item.id;
           return (
-            <button
+           <Link to={`/${item.id}`}>
+             <button
               key={item.name}
               onClick={() => handleItemClick(item.id)}
               className={`group flex items-center gap-3 w-full pl-4 ml-1 mx-2 py-3 rounded-xl transition-all duration-300 font-medium text-base text-left
@@ -70,6 +71,7 @@ export default function Sidebar({ activeItem = 'dashboard-home', onItemSelect })
               <span className="group-hover:scale-110 transition-transform">{item.icon}</span>
               <span className="break-words whitespace-normal">{item.name}</span>
             </button>
+           </Link>
           );
         })}
       </nav>
