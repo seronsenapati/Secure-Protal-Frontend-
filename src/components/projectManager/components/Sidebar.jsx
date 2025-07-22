@@ -1,61 +1,115 @@
 import React, { useState } from "react";
-import { NavLink, useLocation } from 'react-router-dom';
-import { Home, PlusSquare, FolderOpen, Gavel, Users, BarChart2, FileText, MessageCircle, FileDown, IndianRupee, Box, ClipboardList, Truck, CreditCard, History } from "lucide-react";
-import { motion, AnimatePresence } from 'framer-motion';
+import { Home, PlusSquare, FolderOpen, Gavel, Users, BarChart2, FileText, MessageCircle, FileDown, IndianRupee, Box, ClipboardList, Truck, CreditCard, History, Shield, User, UserCircle, LogOut, ChevronDown } from "lucide-react";
 
 const menu = [
-  { name: 'Dashboard Home', icon: <Home size={22} />, to: '/', color: 'border-blue-500' },
-  { name: 'Create Project', icon: <PlusSquare size={22} />, to: '/create-project', color: 'border-blue-500' },
-  { name: 'All My Projects', icon: <FolderOpen size={22} />, to: '/all-projects', color: 'border-blue-500' },
-  { name: 'Project Monitoring', icon: <BarChart2 size={22} />, to: '/project-monitoring', color: 'border-blue-500' },
-  { name: 'Fund Requests', icon: <IndianRupee size={22} />, to: '/fund-requests', color: 'border-teal-500' },
-  { name: 'Documents & Blueprints', icon: <FileText size={22} />, to: '/documents-blueprints', color: 'border-orange-500' },
-  { name: 'Internal Chat', icon: <MessageCircle size={22} />, to: '/internal-chat', color: 'border-blue-500' },
-  { name: 'Export Reports', icon: <FileDown size={22} />, to: '/export-reports', color: 'border-blue-500' },
-  { name: 'Product Catalog', icon: <Box size={22} />, to: '/product-catalog', color: 'border-blue-500' },
-  { name: 'Incoming Orders', icon: <ClipboardList size={22} />, to: '/incoming-orders', color: 'border-blue-500' },
-  { name: 'Delivery Management', icon: <Truck size={22} />, to: '/delivery-management', color: 'border-blue-500' },
-  { name: 'Payment & Fund Tracker', icon: <CreditCard size={22} />, to: '/fund-tracker', color: 'border-blue-500' },
-  { name: 'Delivery History', icon: <History size={22} />, to: '/delivery-history', color: 'border-blue-500' },
-  { name: 'Messaging', icon: <MessageCircle size={22} />, to: '/messaging', color: 'border-blue-500' },
+  { name: 'Dashboard Home', icon: <Home size={22} />, id: 'dashboard-home', color: 'border-emerald-400' },
+  { name: 'Create Project', icon: <PlusSquare size={22} />, id: 'create-project', color: 'border-emerald-400' },
+  { name: 'All My Projects', icon: <FolderOpen size={22} />, id: 'all-projects', color: 'border-emerald-400' },
+  { name: 'Project Monitoring', icon: <BarChart2 size={22} />, id: 'project-monitoring', color: 'border-emerald-400' },
+  { name: 'Fund Requests', icon: <IndianRupee size={22} />, id: 'fund-requests', color: 'border-cyan-400' },
+  { name: 'Documents & Blueprints', icon: <FileText size={22} />, id: 'documents-blueprints', color: 'border-amber-400' },
+  { name: 'Internal Chat', icon: <MessageCircle size={22} />, id: 'internal-chat', color: 'border-emerald-400' },
+  { name: 'Export Reports', icon: <FileDown size={22} />, id: 'export-reports', color: 'border-emerald-400' },
+  { name: 'Product Catalog', icon: <Box size={22} />, id: 'product-catalog', color: 'border-emerald-400' },
+  { name: 'Incoming Orders', icon: <ClipboardList size={22} />, id: 'incoming-orders', color: 'border-emerald-400' },
+  { name: 'Delivery Management', icon: <Truck size={22} />, id: 'delivery-management', color: 'border-emerald-400' },
+  { name: 'Payment & Fund Tracker', icon: <CreditCard size={22} />, id: 'fund-tracker', color: 'border-emerald-400' },
+  { name: 'Delivery History', icon: <History size={22} />, id: 'delivery-history', color: 'border-emerald-400' },
+  { name: 'Messaging', icon: <MessageCircle size={22} />, id: 'messaging', color: 'border-emerald-400' },
 ];
 
-export default function Sidebar() {
-  const location = useLocation();
+export default function Sidebar({ activeItem = 'dashboard-home', onItemSelect }) {
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  const toggleProfileDropdown = () => {
+    setIsProfileOpen(!isProfileOpen);
+  };
+
+  const handleItemClick = (itemId) => {
+    if (onItemSelect) {
+      onItemSelect(itemId);
+    }
+  };
+
   return (
-    <aside className="fixed left-0 top-0 h-full w-80 z-30 bg-white/60 backdrop-blur-xl border-r border-white/30 shadow-[0_4px_24px_rgba(42,77,105,0.08)] rounded-tr-2xl rounded-br-2xl flex flex-col py-8 px-4 min-h-0 overflow-x-hidden">
-      <div className="mb-10 flex items-center justify-center">
-        <span className="text-2xl font-bold text-primary tracking-widest">SecurePortal</span>
+    <aside className=" left-0 top-0 min-h-full w-80 z-30 bg-slate-800/60 backdrop-blur-xl border-r border-slate-700/50 shadow-[0_4px_24px_rgba(0,0,0,0.3)]  flex flex-col py-8 px-4 overflow-x-hidden relative">
+      <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-yellow-500/5  "></div>
+      
+      {/* Logo */}
+      <div className="mb-10 flex items-center justify-center gap-3 relative z-10">
+        <div className="w-10 h-10 bg-gradient-to-r from-amber-400 to-orange-300 rounded-xl flex items-center justify-center">
+          <Shield className="w-6 h-6 text-slate-900" />
+        </div>
+        <h1 className="text-xl font-bold bg-gradient-to-r from-amber-400 to-orange-300 bg-clip-text text-transparent">
+          SecurePortal
+        </h1>
       </div>
+
+      {/* Navigation */}
       <nav
-        className="flex-1 flex flex-col gap-2 overflow-y-auto overflow-x-hidden max-h-[calc(100vh-120px)] min-h-0 scrollbar-thin scrollbar-thumb-[#2A4D69]/80 scrollbar-track-[#F7F9FC] scrollbar-thumb-rounded-full scrollbar-track-rounded-full pb-4 pr-4 -mr-4"
+        className="flex-1 flex flex-col gap-2 overflow-y-auto overflow-x-hidden max-h-[calc(100vh-200px)] min-h-0 scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-800 scrollbar-thumb-rounded-full scrollbar-track-rounded-full pb-4 pr-4 -mr-4 relative z-10"
         style={{
-          scrollbarColor: '#2A4D69 #F7F9FC',
+          scrollbarColor: '#475569 #1e293b',
           scrollbarWidth: 'thin',
         }}
       >
         {menu.map((item) => {
-          const isActive = location.pathname === item.to;
+          const isActive = activeItem === item.id;
           return (
-            <NavLink
+            <button
               key={item.name}
-              to={item.to}
-              className={({ isActive }) =>
-                `group flex items-center gap-3 w-full pl-4 ml-1 mx-2 py-3 rounded-2xl transition-all duration-200 font-medium text-base
-                hover:bg-accent/10 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-accent/20
-                ${isActive ? `bg-accent/20 text-primary font-semibold shadow-lg ${item.color}` : "text-secondary"}`
+              onClick={() => handleItemClick(item.id)}
+              className={`group flex items-center gap-3 w-full pl-4 ml-1 mx-2 py-3 rounded-xl transition-all duration-300 font-medium text-base text-left
+                hover:bg-slate-700/50 hover:text-white hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-400/20
+                ${isActive 
+                  ? `bg-gradient-to-r from-yellow-300 via-emerald-400 to-cyan-400 text-slate-900 font-medium shadow-lg shadow-emerald-500/20 ${item.color}` 
+                  : "text-slate-300"
+                }`
               }
-              style={{ position: 'relative' }}
             >
-              <span className="text-primary group-hover:scale-110 transition-transform">{item.icon}</span>
+              <span className="group-hover:scale-110 transition-transform">{item.icon}</span>
               <span className="break-words whitespace-normal">{item.name}</span>
-            </NavLink>
+            </button>
           );
         })}
       </nav>
-      <div className="mt-auto text-xs text-center text-secondary pt-8">
+
+      {/* User Profile */}
+      <div className="mt-auto bg-slate-700/50 rounded-xl p-4 backdrop-blur-sm relative z-10 mb-4">
+        <div 
+          className="flex items-center gap-3 cursor-pointer"
+          onClick={toggleProfileDropdown}
+        >
+          <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center">
+            <User className="w-5 h-5 text-slate-900" />
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-white">Project Manager</p>
+            <p className="text-xs text-slate-400">manager@secureportal.com</p>
+          </div>
+          <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isProfileOpen ? 'rotate-180' : ''}`} />
+        </div>
+        {isProfileOpen && (
+          <div className="mt-3 bg-slate-600/50 rounded-lg p-2 flex flex-col gap-3">
+            <button 
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-300 hover:bg-slate-500/50 rounded-md transition-colors"
+              onClick={() => setIsProfileOpen(false)}
+            >
+              <UserCircle className="w-4 h-4" />
+              Profile
+            </button>
+            <button className="w-full flex items-center gap-2 px-3 py-2 text-sm bg-red-400/40 text-red-400/90 hover:bg-slate-500/50 rounded-md transition-colors">
+              <LogOut className="w-4 h-4" />
+              Logout
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="text-xs text-center text-slate-400 relative z-10">
         <span>© 2025 Project Manager</span>
       </div>
     </aside>
   );
-} 
+}

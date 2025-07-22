@@ -72,12 +72,12 @@ const App = () => {
   return (
     <ProjectContext.Provider value={{ addProject, dynamicProjects, hardcodedProjects }}>
       <Router>
-        <div className="relative min-h-screen flex bg-background text-text font-sans">
+        <div className="relative min-h-screen flex bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-text font-sans">
           <ParticleBackground />
           <Sidebar />
-          <div className="flex-1 flex flex-col min-h-screen ml-80">
-            <Topbar />
-            <main className="flex-1 p-6 pt-28">
+          <div className="flex-1 flex flex-col min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900  ">
+            {/* <Topbar /> */}
+            <main className="flex-1 p-6 ">
               <Routes>
                 <Route path="/" element={<DashboardHome />} />
                 <Route path="/create-project" element={<CreateProject />} />
