@@ -15,7 +15,7 @@ import ExportReports from './pages/ExportReports';
 import ParticleBackground from './components/ParticleBackground';
 import ProfilePage from './pages/ProfilePage';
 import SettingsPage from './pages/SettingsPage';
-import { ProjectContext } from '../../projectContext';
+import { ProjectContext } from './projectContext';
 
 const hardcodedProjects = [
   {
