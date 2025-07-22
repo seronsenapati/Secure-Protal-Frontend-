@@ -2,19 +2,19 @@ import React, { useState } from "react";
 import { Home, PlusSquare, FolderOpen, Gavel, Users, BarChart2, FileText, MessageCircle, FileDown, IndianRupee, Box, ClipboardList, Truck, CreditCard, History, Shield, User, UserCircle, LogOut, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 const menu = [
-  { name: 'Dashboard Home', icon: <Home size={22} />, id: 'dashboard-home', color: 'border-emerald-400' },
+  { name: 'Dashboard Home', icon: <Home size={22} />, id: '', color: 'border-emerald-400' },
   { name: 'Create Project', icon: <PlusSquare size={22} />, id: 'create-project', color: 'border-emerald-400' },
   { name: 'All My Projects', icon: <FolderOpen size={22} />, id: 'all-projects', color: 'border-emerald-400' },
   { name: 'Project Monitoring', icon: <BarChart2 size={22} />, id: 'project-monitoring', color: 'border-emerald-400' },
   { name: 'Fund Requests', icon: <IndianRupee size={22} />, id: 'fund-requests', color: 'border-cyan-400' },
   { name: 'Documents & Blueprints', icon: <FileText size={22} />, id: 'documents-blueprints', color: 'border-amber-400' },
   { name: 'Internal Chat', icon: <MessageCircle size={22} />, id: 'internal-chat', color: 'border-emerald-400' },
-  { name: 'Export Reports', icon: <FileDown size={22} />, id: 'export-reports', color: 'border-emerald-400' },
-  { name: 'Product Catalog', icon: <Box size={22} />, id: 'product-catalog', color: 'border-emerald-400' },
-  { name: 'Incoming Orders', icon: <ClipboardList size={22} />, id: 'incoming-orders', color: 'border-emerald-400' },
-  { name: 'Delivery Management', icon: <Truck size={22} />, id: 'delivery-management', color: 'border-emerald-400' },
+
+  
+ 
+  
   { name: 'Payment & Fund Tracker', icon: <CreditCard size={22} />, id: 'fund-tracker', color: 'border-emerald-400' },
-  { name: 'Delivery History', icon: <History size={22} />, id: 'delivery-history', color: 'border-emerald-400' },
+  
   { name: 'Messaging', icon: <MessageCircle size={22} />, id: 'messaging', color: 'border-emerald-400' },
 ];
 
