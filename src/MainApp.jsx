@@ -1,40 +1,81 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AuthProvider, ROLES } from './contexts/AuthContext';
+import ProtectedRoute from './components/common/ProtectedRoute';
 
-// Landing page
-import LandingPage from "./components/landingPage/components/landing/LandingPage/index.jsx";
+// Import all dashboard components
+import LandingPage from './components/landingPage/components/landing/LandingPage';
+import ContractorDashboard from './components/contractorDash/App';
+import SupplierDashboard from './components/supplier/App';
+import ProjectManagerDashboard from './components/projectManager/App';
+import SupervisorDashboard from './components/supervisorDash/LandingDashboardSupervisor';
 
-// Contractor
-import ContractorDashboard from "./components/contractorDash/LandingDashboardContractor.jsx";
+// Import the main App component for the landing page
+import App from './components/landingPage/components/App';
+import './components/landingPage/index.css';
 
-// Supplier
-// TODO: Replace with actual SupplierLogin component if/when available
-const SupplierLogin = () => <div>Supplier Login (Component not found)</div>;
-import SupplierDashboard from "./components/supplier/pages/Overview.jsx";
+// Component to handle redirection after login
+const AuthCallback = () => {
+  const location = useLocation();
+  return <Navigate to={location.state?.from?.pathname || '/'} replace />;
+};
 
-// Government
-// TODO: Replace with actual GovLogin component if/when available
-const GovLogin = () => <div>Government Login (Component not found)</div>;
-// TODO: Replace with actual ProjectManagerDashboard component if/when available
-const ProjectManagerDashboard = () => <div>Project Manager Dashboard (Component not found)</div>;
-import SupervisorDashboard from "./components/supervisorDash/LandingDashboardSupervisor.jsx";
-
-function MainApp() {
+const MainApp = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/contractor/login" element={<LandingPage contractorLoginModalOpen />} />
-        <Route path="/dashboard/contractor" element={<ContractorDashboard />} />
-        <Route path="/supplier/login" element={<SupplierLogin />} />
-        <Route path="/dashboard/supplier" element={<SupplierDashboard />} />
-        <Route path="/gov/login" element={<GovLogin />} />
-        <Route path="/dashboard/pm" element={<ProjectManagerDashboard />} />
-        <Route path="/dashboard/supervisor" element={<SupervisorDashboard />} />
-        <Route path="*" element={<div>404 Not Found</div>} />
-      </Routes>
-    </BrowserRouter>
+    <Router>
+      <AuthProvider>
+        <Routes>
+          {/* Main landing page route */}
+          <Route path="/" element={<App />} />
+          
+          {/* Auth callback route */}
+          <Route path="/auth/callback" element={<AuthCallback />} />
+          
+          {/* Protected dashboard routes */}
+          <Route 
+            path="/dashboard/contractor" 
+            element={
+              <ProtectedRoute 
+                allowedRoles={[ROLES.INDIVIDUAL_CONTRACTOR, ROLES.CORPORATE_CONTRACTOR]}
+              >
+                <ContractorDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          
+          <Route 
+            path="/dashboard/supplier" 
+            element={
+              <ProtectedRoute allowedRoles={[ROLES.SUPPLIER]}>
+                <SupplierDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          
+          <Route 
+            path="/dashboard/pm" 
+            element={
+              <ProtectedRoute allowedRoles={[ROLES.PROJECT_MANAGER]}>
+                <ProjectManagerDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          
+          <Route 
+            path="/dashboard/supervisor" 
+            element={
+              <ProtectedRoute allowedRoles={[ROLES.SUPERVISOR]}>
+                <SupervisorDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* 404 Not Found route */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </AuthProvider>
+    </Router>
   );
-}
+};
 
 export default MainApp;

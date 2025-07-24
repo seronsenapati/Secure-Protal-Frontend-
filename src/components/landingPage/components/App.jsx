@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../../src/contexts/AuthContext';
 import Header from './common/Header';
 import Footer from './common/Footer';
 import LoadingScreen from './common/LoadingScreen';
@@ -6,8 +8,10 @@ import LandingPage from './landing/LandingPage';
 import '../index.css';
 
 const MainApp = () => {
+  const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
+  
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [currentPage, setCurrentPage] = useState('landing');
   const [showGovtOptions, setShowGovtOptions] = useState(false);
   const [formData, setFormData] = useState({ email: '', phone: '', message: '' });
   const [formErrors, setFormErrors] = useState({});
@@ -21,11 +25,57 @@ const MainApp = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Loading animation
+  // Handle loading and redirection states
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1500);
-    return () => clearTimeout(timer);
-  }, []);
+    console.log('App: useEffect triggered - user:', user, 'authLoading:', authLoading, 'loading:', loading);
+    
+    if (authLoading) {
+      console.log('App: Auth is still loading, showing loading state');
+      setLoading(true);
+      return;
+    }
+
+    // Auth loading is done, set a minimum loading time for better UX
+    const timer = setTimeout(() => {
+      console.log('App: Auth loading complete, checking user state:', user);
+      setLoading(false);
+      
+      // If user is authenticated, redirect to appropriate dashboard
+      if (user) {
+        console.log('App: User is authenticated, checking role:', user.role);
+        let redirectPath = '/';
+        
+        switch(user.role) {
+          case 'individual_contractor':
+          case 'corporate_contractor':
+            redirectPath = '/dashboard/contractor';
+            break;
+          case 'supplier':
+            redirectPath = '/dashboard/supplier';
+            break;
+          case 'project_manager':
+            redirectPath = '/dashboard/pm';
+            break;
+          case 'supervisor':
+            redirectPath = '/dashboard/supervisor';
+            break;
+          default:
+            console.warn('App: Unknown user role, not redirecting');
+            return;
+        }
+        
+        console.log('App: Redirecting to:', redirectPath);
+        navigate(redirectPath, { replace: true });
+      } else {
+        console.log('App: No user logged in, staying on landing page');
+      }
+    }, 1000);
+
+    return () => {
+      console.log('App: Cleaning up timer');
+      clearTimeout(timer);
+    };
+  }, [user, authLoading, navigate]);
 
   const nextSlide = () => { setCurrentSlide((prev) => (prev + 1) % 3); };
   const prevSlide = () => { setCurrentSlide((prev) => (prev - 1 + 3) % 3); };
@@ -49,7 +99,7 @@ const MainApp = () => {
     setFormErrors({});
   };
 
-  if (loading) return <LoadingScreen />;
+  if (loading || authLoading) return <LoadingScreen />;
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh' }}>

@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../../../contexts/AuthContext';
 import { User, Lock, Mail, Phone, Building2, KeyRound } from 'lucide-react';
 import {
   FloatingInput,
@@ -36,15 +38,51 @@ export default function AuthFlowModal({ selectedType, onClose }) {
     }, 1200);
   };
 
+  const { login: loginUser, signup: signupUser } = useAuth();
+  const navigate = useNavigate();
+
   // Form submit handlers
-  const handleLoginSubmit = e => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Add login logic
+    try {
+      const success = await loginUser({
+        username: login.username,
+        password: login.password,
+        userType: selectedType,
+        role: selectedType === 'govt-officer' ? signup.role : undefined,
+      });
+      
+      if (success) {
+        onClose();
+      } else {
+        // Handle login error (you might want to show an error message to the user)
+        console.error('Login failed');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+    }
   };
   
-  const handleSignupSubmit = e => {
+  const handleSignupSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Add signup logic
+    try {
+      const userData = {
+        ...signup,
+        userType: selectedType,
+        role: selectedType === 'govt-officer' ? signup.role : undefined,
+      };
+      
+      const success = await signupUser(userData);
+      
+      if (success) {
+        onClose();
+      } else {
+        // Handle signup error (you might want to show an error message to the user)
+        console.error('Signup failed');
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+    }
   };
 
   let title = '';
