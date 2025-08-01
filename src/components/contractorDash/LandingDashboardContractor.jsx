@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import ProjectDetailsPopup from './BiddingDetailsCard';
 import {
   Shield,
@@ -39,6 +39,7 @@ import {
 const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const activeTab = useSelector(state => state.projectsDashboard.activeTab);
   const [showMaterials, setShowMaterials] = useState(false);
@@ -48,22 +49,26 @@ const Dashboard = () => {
   const myBids = useSelector(state => state.projectsDashboard.myBids);
 
   const hasAcceptedBid = myBids.some(bid => bid.status === 'accepted');
-  const dashboardMode = useSelector(state => state.projectsDashboard.dashMode)
-  // useEffect(() => {
-  //   if (dashboardMode === 'execution') {
-  //     navigate('/dashboardContractor'); 
-  //   }
-  // }, [dashboardMode, navigate]);
-  
+  const dashboardMode = useSelector(state => state.projectsDashboard.dashMode);
 
   useEffect(() => {
-    dispatch(recalculateDashMode())
-    if (dashboardMode === 'bidding' && activeTab !== 'overview' && activeTab !== 'projects' && activeTab !== 'bids' && activeTab !== 'communication' && activeTab !== 'settings') {
-      dispatch(setActiveTab('overview'));
-    } else if (dashboardMode === 'execution' && activeTab !== 'overview' && activeTab !== 'projects' && activeTab !== 'updates'&& activeTab !== 'fund' && activeTab !== 'expenses' && activeTab !== 'communication' && activeTab !== 'settings') {
-      dispatch(setActiveTab('overview'));
+    dispatch(recalculateDashMode());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const currentPath = location.pathname.split('/').pop() || '';
+    const isPathValid = (path) => {
+      if (dashboardMode === 'bidding') {
+        return ['', 'availableprojects', 'bids', 'settings', 'communication'].includes(path);
+      } else {
+        return ['', 'availableprojects', 'updates', 'expenses', 'fund', 'communication', 'settings'].includes(path);
+      }
+    };
+
+    if (!isPathValid(currentPath)) {
+      navigate('', { replace: true });
     }
-  }, [dashboardMode, activeTab, dispatch]);
+  }, [dashboardMode, location.pathname, navigate]);
 
   const biddingStats = [
     { title: 'Active Bids', value: '3', icon: FileText, color: 'from-emerald-400 to-cyan-400' },
@@ -72,15 +77,15 @@ const Dashboard = () => {
   ];
 
   const availableProjects = useSelector(state => state.projectsDashboard.availableProjects)
-const sidebarItems = [
-    { id: 'overview', label: 'Overview', icon: Home, link: "/dashboardContractor" },
-    { id: 'projects', label: 'Available Projects', hidden: dashboardMode === 'execution', icon: FileText, link: "/availableprojects" },
-    { id: 'updates', label: 'Updates', icon: Activity, hidden: dashboardMode === 'bidding', link: "/updates" },
-    { id: 'expenses', label: 'Expenses', icon: BarChart3, hidden: dashboardMode === 'bidding', link: "/expenses" },
-    { id: 'bids', label: 'My Bids', icon: DollarSign, hidden: dashboardMode === 'execution', link: "/bids" },
-    { id: 'communication', label: 'Communication', hidden: dashboardMode === 'bidding', icon: Users, link: "/communication" },
-    { id: 'fund', label: 'Request Fund', hidden: dashboardMode === 'bidding', icon: DollarSign, link: "/requestFund" },
-    { id: 'settings', label: 'Settings', icon: Settings, link: "/settings" },
+  const sidebarItems = [
+    { id: 'overview', label: 'Overview', icon: Home, link: "" },
+    { id: 'projects', label: 'Available Projects', hidden: dashboardMode === 'execution', icon: FileText, link: "availableprojects" },
+    { id: 'updates', label: 'Updates', icon: Activity, hidden: dashboardMode === 'bidding', link: "updates" },
+    { id: 'expenses', label: 'Expenses', icon: BarChart3, hidden: dashboardMode === 'bidding', link: "expenses" },
+    { id: 'bids', label: 'My Bids', icon: DollarSign, hidden: dashboardMode === 'execution', link: "bids" },
+    { id: 'communication', label: 'Communication', hidden: dashboardMode === 'bidding', icon: Users, link: "communication" },
+    { id: 'fund', label: 'Request Fund', hidden: dashboardMode === 'bidding', icon: DollarSign, link: "requestFund" },
+    { id: 'settings', label: 'Settings', icon: Settings, link: "settings" },
   ];
 
   const currentProject = useSelector(state => state.projectsDashboard.allotedProject)
@@ -217,21 +222,28 @@ const sidebarItems = [
 
         {/* Navigation */}
         <nav className="mt-4 px-4 relative z-10">
-          {sidebarItems.filter(item => !item.hidden).map((item) => {
-            const Icon = item.icon;
+          {sidebarItems.map((item) => {
+            if (item.hidden) return null;
+
+            const isActive = location.pathname.endsWith(item.link) || 
+                              (item.link === '' && location.pathname.endsWith('contractor'));
+
             return (
-              <Link to={item.link} key={item.id}>
-                <button
-                  onClick={() => dispatch(setActiveTab(item.id))}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all duration-300 ${
-                    activeTab === item.id
-                      ? 'bg-gradient-to-r from-yellow-300 via-emerald-400 to-cyan-400 text-slate-900 font-medium hover:brightness-110 transition-all shadow-lg shadow-em pilota-emerald-500/20'
-                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
-                  }`}
-                >
-                  <Icon className="w-5 h-5" />
-                  <span className="font-medium">{item.label}</span>
-                </button>
+              <Link
+                key={item.id}
+                to={item.link}
+                className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                  isActive
+                    ? 'bg-blue-50 text-blue-600 font-semibold'
+                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                }`}
+                onClick={() => dispatch(setActiveTab(item.id))}
+              >
+                <item.icon className={`w-5 h-5 mr-3 ${isActive ? 'text-blue-600' : 'text-gray-500'}`} />
+                {item.label}
+                {isActive && (
+                  <div className="ml-auto w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
+                )}
               </Link>
             );
           })}
@@ -277,6 +289,7 @@ const sidebarItems = [
       {/* Main Content */}
 
       <div className="flex-1 overflow-auto">
+        <Outlet />
         {/* Header */}
         <header className="bg-slate-800/30 backdrop-blur-sm border-b border-slate-700/50 p-6">
           <div className="flex items-center justify-between">

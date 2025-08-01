@@ -1,28 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Home, PlusSquare, FolderOpen, Gavel, Users, BarChart2, FileText, MessageCircle, FileDown, IndianRupee, Box, ClipboardList, Truck, CreditCard, History, Shield, User, UserCircle, LogOut, ChevronDown } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+
 const menu = [
-  { name: 'Dashboard Home', icon: <Home size={22} />, id: '', color: 'border-emerald-400' },
-  { name: 'Create Project', icon: <PlusSquare size={22} />, id: 'create-project', color: 'border-emerald-400' },
-  { name: 'All My Projects', icon: <FolderOpen size={22} />, id: 'all-projects', color: 'border-emerald-400' },
-  { name: 'Project Monitoring', icon: <BarChart2 size={22} />, id: 'project-monitoring', color: 'border-emerald-400' },
-  { name: 'Fund Requests', icon: <IndianRupee size={22} />, id: 'fund-requests', color: 'border-cyan-400' },
-  { name: 'Documents & Blueprints', icon: <FileText size={22} />, id: 'documents-blueprints', color: 'border-amber-400' },
-  { name: 'Internal Chat', icon: <MessageCircle size={22} />, id: 'internal-chat', color: 'border-emerald-400' },
+  { name: 'Dashboard Home', icon: <Home size={20} />, id: '', color: 'text-blue-600' },
+  { name: 'Create Project', icon: <PlusSquare size={20} />, id: 'create-project', color: 'text-green-600' },
+  { name: 'All My Projects', icon: <FolderOpen size={20} />, id: 'all-projects', color: 'text-purple-600' },
+  { name: 'Project Monitoring', icon: <BarChart2 size={20} />, id: 'project-monitoring', color: 'text-amber-600' },
+  { name: 'Fund Requests', icon: <IndianRupee size={20} />, id: 'fund-requests', color: 'text-cyan-600' },
+  { name: 'Documents & Blueprints', icon: <FileText size={20} />, id: 'documents-blueprints', color: 'text-indigo-600' },
+  { name: 'Internal Chat', icon: <MessageCircle size={20} />, id: 'internal-chat', color: 'text-pink-600' },
+  { name: 'View Bids', icon: <Gavel size={20} />, id: 'view-bids', color: 'text-red-600' },
+  { name: 'Assign Supervisor', icon: <Users size={20} />, id: 'assign-supervisor-supplier', color: 'text-teal-600' },
+  { name: 'Product Catalog', icon: <Box size={20} />, id: 'product-catalog', color: 'text-orange-600' },
+  { name: 'Export Reports', icon: <FileDown size={20} />, id: 'export-reports', color: 'text-yellow-600' },
 ];
 
 export default function Sidebar() {
-  const [activeItem,setActiveItem] = useState()
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState('');
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  // Update active tab based on URL
+  useEffect(() => {
+    const path = location.pathname.split('/').pop() || '';
+    setActiveTab(path);
+  }, [location]);
 
   const toggleProfileDropdown = () => {
     setIsProfileOpen(!isProfileOpen);
-  };
-
-  const handleItemClick = (itemId) => {
-    if (onItemSelect) {
-      onItemSelect(itemId);
-    }
   };
 
   return (
@@ -48,24 +54,29 @@ export default function Sidebar() {
         }}
       >
         {menu.map((item) => {
-          const isActive = activeItem === item.id;
+          const isActive = activeTab === item.id || (activeTab === '' && item.id === '');
           return (
-           <Link to={`/${item.id}`}>
-             <button
-              key={item.name}
-              onClick={() => setActiveItem(item.id)}
-              className={`group flex items-center gap-3 w-full pl-4 ml-1 mx-2 py-3 rounded-xl transition-all duration-300 font-medium text-base text-left
-                hover:bg-slate-700/50 hover:text-white hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-400/20
+            <Link 
+              key={item.id || 'dashboard'}
+              to={item.id || '.'}
+              className={`group flex items-center gap-3 w-full pl-4 pr-2 py-2.5 rounded-lg transition-all duration-200 font-medium text-sm text-left
+                hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20
                 ${isActive 
-                  ? `bg-gradient-to-r from-yellow-300 via-emerald-400 to-cyan-400 text-slate-900 font-medium shadow-lg shadow-emerald-500/20 ${item.color}` 
-                  : "text-slate-300"
+                  ? `bg-blue-50 text-blue-700 font-semibold border-l-4 ${item.color} border-current` 
+                  : "text-gray-600 hover:border-l-4 hover:border-gray-200"
                 }`
               }
             >
-              <span className="group-hover:scale-110 transition-transform">{item.icon}</span>
-              <span className="break-words whitespace-normal">{item.name}</span>
-            </button>
-           </Link>
+              <span className={`${isActive ? 'opacity-100' : 'opacity-70'} group-hover:opacity-100 transition-opacity`}>
+                {React.cloneElement(item.icon, {
+                  className: `w-5 h-5 ${isActive ? 'text-current' : 'text-gray-500'}`
+                })}
+              </span>
+              <span className="flex-1 break-words whitespace-normal">{item.name}</span>
+              {isActive && (
+                <div className="w-1.5 h-1.5 bg-blue-600 rounded-full ml-auto"></div>
+              )}
+            </Link>
           );
         })}
       </nav>

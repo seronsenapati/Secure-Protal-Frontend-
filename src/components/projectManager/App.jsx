@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Sidebar from './components/Sidebar';
-import Topbar from './components/Topbar';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import DashboardHome from './pages/DashboardHome';
 import CreateProject from './pages/CreateProject';
 import AllProjects from './pages/AllProjects';
@@ -13,9 +12,9 @@ import ProductCatalog from './pages/ProductCatalog';
 import DocumentsBlueprints from './pages/DocumentsBlueprints';
 import InternalChat from './pages/InternalChat';
 import ExportReports from './pages/ExportReports';
-import ParticleBackground from './components/ParticleBackground';
 import ProfilePage from './pages/ProfilePage';
 import SettingsPage from './pages/SettingsPage';
+import Layout from './components/Layout';
 import { ProjectContext } from './projectContext';
 
 const hardcodedProjects = [
@@ -66,38 +65,69 @@ const hardcodedProjects = [
   },
 ];
 
+// Component to handle tab state based on route
+const RouteHandler = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Extract the current path and determine the active tab
+  useEffect(() => {
+    const path = location.pathname.split('/').pop() || '';
+    let activeTab = ''; // Default to empty for dashboard home
+    
+    // Map path to tab ID
+    const pathToTabMap = {
+      'create-project': 'create-project',
+      'all-projects': 'all-projects',
+      'view-bids': 'view-bids',
+      'assign-supervisor-supplier': 'assign-supervisor-supplier',
+      'project-monitoring': 'project-monitoring',
+      'fund-requests': 'fund-requests',
+      'product-catalog': 'product-catalog',
+      'documents-blueprints': 'documents-blueprints',
+      'internal-chat': 'internal-chat',
+      'export-reports': 'export-reports',
+      'profile': 'profile',
+      'settings': 'settings'
+    };
+
+    activeTab = pathToTabMap[path] || '';
+    
+    // Update the active tab in the store if needed
+    // dispatch(setActiveTab(activeTab));
+  }, [location, dispatch]);
+
+  return null;
+};
+
 const App = () => {
   const [dynamicProjects, setDynamicProjects] = useState([]);
   const addProject = (project) => setDynamicProjects(prev => [...prev, project]);
-
+  
   return (
     <ProjectContext.Provider value={{ addProject, dynamicProjects, hardcodedProjects }}>
-      <Router>
-        <div className="relative min-h-screen flex bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-text font-sans">
-          {/* <ParticleBackground /> */}
-          <Sidebar />
-          <div className="flex-1 flex flex-col min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900  ">
-            {/* <Topbar /> */}
-            <main className="flex-1 p-6 ">
-              <Routes>
-                <Route path="/" element={<DashboardHome />} />
-                <Route path="/create-project" element={<CreateProject />} />
-                <Route path="/all-projects" element={<AllProjects />} />
-                <Route path="/view-bids" element={<ViewBids />} />
-                <Route path="/assign-supervisor-supplier" element={<AssignSupervisorSupplier />} />
-                <Route path="/project-monitoring" element={<ProjectMonitoring />} />
-                <Route path="/product-catalog" element={<ProductCatalog />} />
-                <Route path="/fund-requests" element={<FundRequests />} />
-                <Route path="/documents-blueprints" element={<DocumentsBlueprints />} />
-                <Route path="/internal-chat" element={<InternalChat />} />
-                <Route path="/export-reports" element={<ExportReports />} />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/settings" element={<SettingsPage />} />
-              </Routes>
-            </main>
-          </div>
-        </div>
-      </Router>
+      <RouteHandler />
+      <Routes>
+        <Route element={<Layout />}>
+          <Route index element={<DashboardHome />} />
+          <Route path="create-project" element={<CreateProject />} />
+          <Route path="all-projects" element={<AllProjects />} />
+          <Route path="view-bids" element={<ViewBids />} />
+          <Route path="assign-supervisor-supplier" element={<AssignSupervisorSupplier />} />
+          <Route path="project-monitoring" element={<ProjectMonitoring />} />
+          <Route path="product-catalog" element={<ProductCatalog />} />
+          <Route path="fund-requests" element={<FundRequests />} />
+          <Route path="documents-blueprints" element={<DocumentsBlueprints />} />
+          <Route path="internal-chat" element={<InternalChat />} />
+          <Route path="export-reports" element={<ExportReports />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route path="settings" element={<SettingsPage />} />
+          
+          {/* Catch-all route for 404 handling */}
+          <Route path="*" element={<DashboardHome />} />
+        </Route>
+      </Routes>
     </ProjectContext.Provider>
   );
 };

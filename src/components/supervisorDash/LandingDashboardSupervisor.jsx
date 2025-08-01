@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ProjectDetailsPopup from './BiddingDetailsCard';
 import {
   Shield,
@@ -17,19 +17,42 @@ import {
   DollarSign,
   User,
   X,
-  ArchiveRestore ,
+  ArchiveRestore,
   UserCircle,
   LogOut,
   VerifiedIcon,
-  Eye ,
+  Eye,
 } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 
 const SupervisorDashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
+
+  // Update active tab based on URL
+  useEffect(() => {
+    const path = location.pathname.split('/').pop() || '';
+    const tabMap = {
+      '': 'overview',
+      'assignedproject': 'projects',
+      'supplierverification': 'supplier',
+      'reviewupdates': 'updates',
+      'fundrequestsreview': 'fund',
+      'requesthistory': 'history',
+      'communication': 'communication',
+      'profile': 'profile',
+      'settings': 'settings'
+    };
+    setActiveTab(tabMap[path] || 'overview');
+  }, [location]);
+
+  const setActiveTabState = (tab) => {
+    setActiveTab(tab);
+  };
+
   const [showMaterials, setShowMaterials] = useState(false);
   const fundReq = useSelector(state => state.supervisorDashboard.fundReq);
   const submittedUpdates = useSelector(state => state.supervisorDashboard.submittedUpdates);
@@ -47,16 +70,17 @@ const SupervisorDashboard = () => {
     { title: 'Days Remaining', value: (Math.ceil((parseDate(useSelector(state => state.supervisorDashboard.allotedProject.endDate)) - parseDate(useSelector(state => state.supervisorDashboard.allotedProject.startDate))) / (1000 * 60 * 60 * 24))), icon: Clock, color: 'from-purple-400 to-pink-400' },
   ];
 
- const sidebarItems = [
-         { id: 'overview', label: 'Overview', icon: Home, link: "/" },
-         { id: 'projects', label: 'Assigned Project', icon: FileText, link: "/assignedproject" },
-         { id: 'supplier', label: 'Supplier Verification', icon: VerifiedIcon, link: "/supplierVerification" },
-         { id: 'updates', label: 'Updates', icon: Activity, link: "/reviewUpdates" },
-         { id: 'fund', label: 'Fund Requests', icon: DollarSign, link: "/fundrequestsReview" },
-         { id: 'history', label: 'Request History', icon: ArchiveRestore, link: "/requestHistory" },
-         { id: 'communication', label: 'Communication', icon: Users, link: "/communication" },
-         { id: 'settings', label: 'Settings', icon: Settings, link: "/settingsSupervisor" },
-       ];
+  const sidebarItems = [
+    { id: 'overview', label: 'Overview', icon: Home, path: '', color: 'text-blue-600' },
+    { id: 'projects', label: 'Assigned Project', icon: FileText, path: 'assignedproject', color: 'text-green-600' },
+    { id: 'supplier', label: 'Supplier Verification', icon: VerifiedIcon, path: 'supplierverification', color: 'text-purple-600' },
+    { id: 'updates', label: 'Updates', icon: Activity, path: 'reviewupdates', color: 'text-amber-600' },
+    { id: 'fund', label: 'Fund Requests', icon: DollarSign, path: 'fundrequestsreview', color: 'text-cyan-600' },
+    { id: 'history', label: 'Request History', icon: ArchiveRestore, path: 'requesthistory', color: 'text-indigo-600' },
+    { id: 'communication', label: 'Communication', icon: Users, path: 'communication', color: 'text-pink-600' },
+    { id: 'settings', label: 'Settings', icon: Settings, path: 'settings', color: 'text-gray-600' },
+    { id: 'profile', label: 'Profile', icon: UserCircle, path: 'profile', color: 'text-teal-600' }
+  ];
 
   function useParsedStartDate(date) {
     if (!date) return null;
@@ -140,75 +164,106 @@ const SupervisorDashboard = () => {
   return (
     <div className="flex h-screen font-sans bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Sidebar */}
-      <div className="w-72 bg-slate-800/60 backdrop-blur-xl border-r border-slate-700/50 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-yellow-500/5"></div>
-
-        {/* Logo */}
-        <div className="flex items-center gap-3 p-6 relative z-10">
-          <div className="w-10 h-10 bg-gradient-to-r from-amber-400 to-orange-300 rounded-xl flex items-center justify-center">
-            <Shield className="w-6 h-6 text-slate-900" />
+      <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-lg z-20 border-r border-gray-200">
+        <div className="flex flex-col h-full">
+          {/* Logo */}
+          <div className="flex items-center justify-center h-16 border-b border-gray-100">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg flex items-center justify-center">
+                <Shield className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                SecurePortal
+              </span>
+            </div>
           </div>
-          <h1 className="text-xl font-bold bg-gradient-to-r from-amber-400 to-orange-300 bg-clip-text text-transparent">
-            SecurePortal
-          </h1>
-        </div>
 
-        {/* Navigation */}
-        <nav className="mt-4 px-4 relative z-10">
-          {sidebarItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <Link to={item.link} key={item.id}>
-                <button
-                  onClick={() => setActiveTab(item.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all duration-300 ${
-                    activeTab === item.id
-                      ? 'bg-gradient-to-r from-yellow-300 via-emerald-400 to-cyan-400 text-slate-900 font-medium hover:brightness-110 transition-all shadow-lg shadow-emerald-500/20'
-                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
-                  }`}
-                >
-                  <Icon className="w-5 h-5" />
-                  <span className="font-medium">{item.label}</span>
-                </button>
-              </Link>
-            );
-          })}
-        </nav>
+          {/* Navigation */}
+          <nav className="flex-1 overflow-y-auto py-4 px-2">
+            <div className="space-y-1">
+              {sidebarItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = activeTab === item.id;
+                return (
+                  <Link
+                    key={item.id}
+                    to={item.path}
+                    className={`flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+                      isActive
+                        ? `bg-blue-50 text-blue-700 font-semibold border-l-4 ${item.color} border-current`
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 hover:border-l-4 hover:border-gray-200'
+                    }`}
+                  >
+                    <Icon className={`w-5 h-5 mr-3 ${isActive ? 'text-current' : 'text-gray-500'}`} />
+                    <span className="flex-1">{item.label}</span>
+                    {isActive && (
+                      <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          </nav>
 
-        {/* User Profile */}
-        <div className="absolute bottom-6 left-4 right-4 bg-slate-700/50 rounded-xl p-4 backdrop-blur-sm">
-          <div 
-            className="flex items-center gap-3 cursor-pointer"
-            onClick={toggleProfileDropdown}
-          >
-            <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center">
-              <User className="w-5 h-5 text-slate-900" />
+          {/* User Profile */}
+          <div className="p-4 border-t border-gray-100">
+            <div className="relative">
+              <button
+                onClick={toggleProfileDropdown}
+                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+              >
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center mr-3">
+                  <User className="w-5 h-5 text-white" />
+                </div>
+                <div className="text-left flex-1">
+                  <p className="text-sm font-medium text-gray-900">Supervisor</p>
+                  <p className="text-xs text-gray-500">supervisor@secureportal.com</p>
+                </div>
+                <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
+                  isProfileOpen ? 'transform rotate-180' : ''
+                }`} />
+              </button>
+
+              {/* Profile Dropdown */}
+              {isProfileOpen && (
+                <div className="absolute bottom-full left-0 right-0 mb-2 bg-white rounded-lg shadow-lg overflow-hidden z-30 border border-gray-100">
+                  <Link
+                    to="profile"
+                    className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                    onClick={() => {
+                      setActiveTab('profile');
+                      setIsProfileOpen(false);
+                    }}
+                  >
+                    <UserCircle className="w-4 h-4 mr-2 text-gray-500" />
+                    Your Profile
+                  </Link>
+                  <Link
+                    to="settings"
+                    className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                    onClick={() => {
+                      setActiveTab('settings');
+                      setIsProfileOpen(false);
+                    }}
+                  >
+                    <Settings className="w-4 h-4 mr-2 text-gray-500" />
+                    Settings
+                  </Link>
+                  <div className="border-t border-gray-100 my-1"></div>
+                  <button
+                    className="w-full flex items-center px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200"
+                    onClick={() => {
+                      // Handle logout
+                      navigate('/');
+                    }}
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign out
+                  </button>
+                </div>
+              )}
             </div>
-            <div className="flex-1">
-              <p className="text-sm font-medium text-white">Supervisor</p>
-              <p className="text-xs text-slate-400">supervisor@secureportal.com</p>
-            </div>
-            <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isProfileOpen ? 'rotate-180' : ''}`} />
           </div>
-          {isProfileOpen && (
-            <div className="mt-3 bg-slate-600/50 rounded-lg p-2 flex flex-col gap-3">
-              <Link to="/profile">
-                <button 
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-300 hover:bg-slate-500/50 rounded-md transition-colors"
-                  onClick={() => setActiveTab('')}
-                >
-                  <UserCircle className="w-4 h-4" />
-                  Profile
-                </button>
-              </Link>
-              <Link to="/logout">
-                <button className="w-full flex items-center gap-2 px-3 py-2 text-sm bg-red-400/40 text-red-400/90 hover:bg-slate-500/50 rounded-md transition-colors">
-                  <LogOut className="w-4 h-4" />
-                  Logout
-                </button>
-              </Link>
-            </div>
-          )}
         </div>
       </div>
 

@@ -33,7 +33,7 @@ const MainApp = () => {
           
           {/* Protected dashboard routes */}
           <Route 
-            path="/dashboard/contractor" 
+            path="/dashboard/contractor/*" 
             element={
               <ProtectedRoute 
                 allowedRoles={[ROLES.INDIVIDUAL_CONTRACTOR, ROLES.CORPORATE_CONTRACTOR]}
@@ -44,7 +44,7 @@ const MainApp = () => {
           />
           
           <Route 
-            path="/dashboard/supplier" 
+            path="/dashboard/supplier/*" 
             element={
               <ProtectedRoute allowedRoles={[ROLES.SUPPLIER]}>
                 <SupplierDashboard />
@@ -53,7 +53,7 @@ const MainApp = () => {
           />
           
           <Route 
-            path="/dashboard/pm" 
+            path="/dashboard/pm/*" 
             element={
               <ProtectedRoute allowedRoles={[ROLES.PROJECT_MANAGER]}>
                 <ProjectManagerDashboard />
@@ -62,7 +62,7 @@ const MainApp = () => {
           />
           
           <Route 
-            path="/dashboard/supervisor" 
+            path="/dashboard/supervisor/*" 
             element={
               <ProtectedRoute allowedRoles={[ROLES.SUPERVISOR]}>
                 <SupervisorDashboard />

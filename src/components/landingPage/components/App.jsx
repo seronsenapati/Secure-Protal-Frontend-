@@ -30,52 +30,15 @@ const MainApp = () => {
     console.log('App: useEffect triggered - user:', user, 'authLoading:', authLoading, 'loading:', loading);
     
     if (authLoading) {
-      console.log('App: Auth is still loading, showing loading state');
       setLoading(true);
       return;
     }
-
     // Auth loading is done, set a minimum loading time for better UX
     const timer = setTimeout(() => {
-      console.log('App: Auth loading complete, checking user state:', user);
       setLoading(false);
-      
-      // If user is authenticated, redirect to appropriate dashboard
-      if (user) {
-        console.log('App: User is authenticated, checking role:', user.role);
-        let redirectPath = '/';
-        
-        switch(user.role) {
-          case 'individual_contractor':
-          case 'corporate_contractor':
-            redirectPath = '/dashboard/contractor';
-            break;
-          case 'supplier':
-            redirectPath = '/dashboard/supplier';
-            break;
-          case 'project_manager':
-            redirectPath = '/dashboard/pm';
-            break;
-          case 'supervisor':
-            redirectPath = '/dashboard/supervisor';
-            break;
-          default:
-            console.warn('App: Unknown user role, not redirecting');
-            return;
-        }
-        
-        console.log('App: Redirecting to:', redirectPath);
-        navigate(redirectPath, { replace: true });
-      } else {
-        console.log('App: No user logged in, staying on landing page');
-      }
     }, 1000);
-
-    return () => {
-      console.log('App: Cleaning up timer');
-      clearTimeout(timer);
-    };
-  }, [user, authLoading, navigate]);
+    return () => clearTimeout(timer);
+  }, [authLoading]);
 
   const nextSlide = () => { setCurrentSlide((prev) => (prev + 1) % 3); };
   const prevSlide = () => { setCurrentSlide((prev) => (prev - 1 + 3) % 3); };

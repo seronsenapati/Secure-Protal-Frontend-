@@ -32,6 +32,8 @@ const LandingPage = ({
   const handleUserTypeSelect = (type) => {
     if (type === 'contractor') {
       setShowContractorModal(true);
+    } else if (type === 'govt-officer') {
+      setSelectedAuthType('govt-officer');
     } else {
       setSelectedAuthType(type);
     }
@@ -91,7 +93,7 @@ const LandingPage = ({
         `}</style>
       </div>
 
-      {/* Government Modal */}
+      {/* Government Modal (just closes modal, no role selection) */}
       {showGovtOptions && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 backdrop-blur-sm p-4" onClick={() => setShowGovtOptions(false)}>
           <div className="bg-[#101624]/95 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 md:p-10 max-w-sm w-full mx-4 shadow-2xl border-2 border-[#1de9b6]/30 relative" onClick={e => e.stopPropagation()}>
@@ -100,17 +102,11 @@ const LandingPage = ({
             </button>
             <div className="text-center mb-4 sm:mb-6">
               <h3 className="text-lg sm:text-xl font-bold text-[#ffd580] mb-2">Government Official</h3>
-              <p className="text-gray-400 text-xs sm:text-sm">Select your role to continue</p>
+              <p className="text-gray-400 text-xs sm:text-sm">Login or Signup as a Government Officer</p>
             </div>
             <div className="space-y-2 sm:space-y-3">
-              <button className="w-full p-3 sm:p-4 bg-[#101624]/80 hover:bg-[#101624] border-2 border-[#1de9b6]/20 hover:border-[#ffd580]/40 rounded-xl font-semibold text-gray-200 hover:text-[#ffd580] transition-all text-sm sm:text-base" onClick={() => { setShowGovtOptions(false); goToGovtLogin('supervisor'); }}>
-                Supervisor
-              </button>
-              <button className="w-full p-3 sm:p-4 bg-[#101624]/80 hover:bg-[#101624] border-2 border-[#1de9b6]/20 hover:border-[#ffd580]/40 rounded-xl font-semibold text-gray-200 hover:text-[#ffd580] transition-all text-sm sm:text-base" onClick={() => { setShowGovtOptions(false); goToGovtLogin('project-manager'); }}>
-                Project Manager
-              </button>
-              <button className="w-full p-3 sm:p-4 bg-[#101624]/80 hover:bg-[#101624] border-2 border-[#1de9b6]/20 hover:border-[#ffd580]/40 rounded-xl font-semibold text-gray-200 hover:text-[#ffd580] transition-all text-sm sm:text-base" onClick={() => { setShowGovtOptions(false); goToGovtLogin('department-admin'); }}>
-                Department Admin
+              <button className="w-full p-3 sm:p-4 bg-[#101624]/80 hover:bg-[#101624] border-2 border-[#1de9b6]/20 hover:border-[#ffd580]/40 rounded-xl font-semibold text-gray-200 hover:text-[#ffd580] transition-all text-sm sm:text-base" onClick={() => { setShowGovtOptions(false); setSelectedAuthType('govt-officer'); }}>
+                Continue
               </button>
             </div>
           </div>
