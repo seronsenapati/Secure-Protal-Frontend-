@@ -35,44 +35,44 @@ const SupplierMaterialVerificationPanel = () => {
   const navigate = useNavigate();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [suppliers, setSuppliers] = useState([
-  {
-    id: 1,
-    name: "Shree BuildTech Suppliers",
-    contact: "Rajesh Kumar",
-    email: "rajesh@shreebuildtech.in",
-    phone: "+91 98765 43210",
-    items: [
-      { name: "Portland Cement", delivered: 380, required: 500, unit: "bags", status: "on-time" },
-      { name: "TMT Steel Bars", delivered: 2400, required: 3000, unit: "kg", status: "late" }
-    ],
-    overallStatus: "partial",
-    deliveryProof: ["invoice_001.pdf", "delivery_challan.jpg"]
-  },
-  {
-    id: 2,
-    name: "Triveni Construction Materials",
-    contact: "Pooja Verma",
-    email: "pooja@trivenimaterials.in",
-    phone: "+91 91234 56789",
-    items: [
-      { name: "Fly Ash Bricks", delivered: 10000, required: 10000, unit: "pieces", status: "on-time" },
-      { name: "Coarse Sand", delivered: 20, required: 20, unit: "tons", status: "on-time" }
-    ],
-    overallStatus: "completed",
-    deliveryProof: ["receipt_002.pdf", "photo_delivery.jpg"]
-  },
-  {
-    id: 3,
-    name: "Metro Hardware & Electricals",
-    contact: "Anil Mehra",
-    email: "anil@metrohardware.in",
-    phone: "+91 99887 77665",
-    items: [
-      { name: "PVC Electrical Conduits", delivered: 0, required: 1000, unit: "meters", status: "missing" }
-    ],
-    overallStatus: "pending",
-    deliveryProof: []
-  }
+  // {
+  //   id: 1,
+  //   name: "Shree BuildTech Suppliers",
+  //   contact: "Rajesh Kumar",
+  //   email: "rajesh@shreebuildtech.in",
+  //   phone: "+91 98765 43210",
+  //   items: [
+  //     { name: "Portland Cement", delivered: 380, required: 500, unit: "bags", status: "on-time" },
+  //     { name: "TMT Steel Bars", delivered: 2400, required: 3000, unit: "kg", status: "late" }
+  //   ],
+  //   overallStatus: "partial",
+  //   deliveryProof: ["invoice_001.pdf", "delivery_challan.jpg"]
+  // },
+  // {
+  //   id: 2,
+  //   name: "Triveni Construction Materials",
+  //   contact: "Pooja Verma",
+  //   email: "pooja@trivenimaterials.in",
+  //   phone: "+91 91234 56789",
+  //   items: [
+  //     { name: "Fly Ash Bricks", delivered: 10000, required: 10000, unit: "pieces", status: "on-time" },
+  //     { name: "Coarse Sand", delivered: 20, required: 20, unit: "tons", status: "on-time" }
+  //   ],
+  //   overallStatus: "completed",
+  //   deliveryProof: ["receipt_002.pdf", "photo_delivery.jpg"]
+  // },
+  // {
+  //   id: 3,
+  //   name: "Metro Hardware & Electricals",
+  //   contact: "Anil Mehra",
+  //   email: "anil@metrohardware.in",
+  //   phone: "+91 99887 77665",
+  //   items: [
+  //     { name: "PVC Electrical Conduits", delivered: 0, required: 1000, unit: "meters", status: "missing" }
+  //   ],
+  //   overallStatus: "pending",
+  //   deliveryProof: []
+  // }
 ]);
 
   const [alternateSuppliers, setAlternateSuppliers] = useState(['Supplier A', 'Supplier B', 'Supplier C']);

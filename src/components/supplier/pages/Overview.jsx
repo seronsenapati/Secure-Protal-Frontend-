@@ -33,19 +33,19 @@ const stats = [
 ];
 
 const project = {
-  name: "Municipal Infrastructure Upgrade",
-  materials: ["Cement", "Steel", "Bricks"],
-  lastDelivery: "12 May 2025",
-  progress: 60,
-  status: "On Track",
-  statusColor: "bg-emerald-400",
+  // name: "Municipal Infrastructure Upgrade",
+  // materials: ["Cement", "Steel", "Bricks"],
+  // lastDelivery: "12 May 2025",
+  // progress: 60,
+  // status: "On Track",
+  // statusColor: "bg-emerald-400",
 };
 
 const upcomingDelivery = {
-  project: "Smart City Roadworks",
-  due: "18 May 2025",
-  items: ["Bitumen", "Concrete Pipes"],
-  countdown: "3 days left",
+  // project: "Smart City Roadworks",
+  // due: "18 May 2025",
+  // items: ["Bitumen", "Concrete Pipes"],
+  // countdown: "3 days left",
 };
 
 export default function Overview() {
@@ -148,11 +148,15 @@ export default function Overview() {
                 </div>
                 <div className="mb-4">
                   <h4 className="text-white font-semibold mb-2">Items</h4>
-                  <ul className="text-sm text-slate-300 list-disc pl-5 space-y-1">
+                  { upcomingDelivery.length>0 ?
+                    <ul className="text-sm text-slate-300 list-disc pl-5 space-y-1">
                     {upcomingDelivery.items.map((item, i) => (
                       <li key={i}>{item}</li>
                     ))}
                   </ul>
+                  :
+                  <h1 className="text-green-300">No deliveries</h1>
+                  }
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-emerald-400">{upcomingDelivery.countdown}</span>
